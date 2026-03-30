@@ -1,0 +1,32 @@
+First, run these two commands in your terminal
+
+nix-env -iA cachix -f https://cachix.org/api/v1/install
+
+and 
+
+sudo cachix use crazazy
+
+
+Then, rebuild your NixOS system
+
+sudo nixos-rebuild switch --flake .#K10
+
+when completed
+
+reboot
+
+cd /etc/nixos
+
+then copy the flake from the backup to /etc/nixos
+using sudo nano to edit the file and copy from the backup
+
+sudo nix flake init
+
+then, use the nix_update.sh script to rebuild like normal
+
+By running the cachix use crazazy command before you rebuild, you ensure that your Nix installation 
+is already aware of and configured to use the crazazy binary cache. When nixos-rebuild switch then starts 
+to evaluate and build your system, Nix will check the crazazy cache for pre-built versions of the packages 
+it needs. If it finds them, it will download them (substitute) instead of building them locally, making the 
+rebuild process much, much faster for those components.
+
